@@ -1,1 +1,15 @@
 .DS_Store
+# raw Kaggle files (in dataset/ or the repo root)
+dataset/
+/RAW_*.csv
+/PP_*.csv
+/interactions_*.csv
+/ingr_map.pkl
+# local
+.venv/
+processed/
+archive/
+*.pdf
+CLAUDE.md
+__pycache__/
+.ipynb_checkpoints/

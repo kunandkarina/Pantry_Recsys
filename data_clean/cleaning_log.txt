@@ -1,19 +1,18 @@
-interactions_train: drop rating==0 -> 698901 -> 681944 (-16957)
-interactions_validation: drop rating==0 -> 7023 -> 6667 (-356)
-interactions_test: drop rating==0 -> 12455 -> 11768 (-687)
-users with < 3 rated train interactions: 5021 removed
-interactions_train: drop thin users -> 681944 -> 672419 (-9525)
-interactions_validation: drop thin users -> 6667 -> 6203 (-464)
-interactions_test: drop thin users -> 11768 -> 10136 (-1632)
-minutes: 834 zero -> imputed 35; 1837 clipped at 720
-nutrition.calories: 1895 clipped at 3282.4
-nutrition.total_fat_pdv: 1895 clipped at 280.9
-nutrition.sugar_pdv: 1907 clipped at 1058.0
-nutrition.sodium_pdv: 1810 clipped at 196.0
-nutrition.protein_pdv: 1848 clipped at 175.0
-nutrition.saturated_fat_pdv: 1891 clipped at 368.0
-nutrition.carbohydrates_pdv: 1862 clipped at 148.0
-nutrition_extreme: 5715 recipes; calories_zero: 16
+RAW_interactions: 1132367 -> 935120 reviews of PP recipes (one per user-recipe pair)
+drop rating==0: 935120 -> 888863 (-46257)
+users with >= 3 rated reviews before 2015-01-01: 28671 of 158047
+interactions_train: 725446 rows, 28671 users, 2000-02-25 to 2014-12-31; rating==5 share 0.757
+interactions_validation: 5065 rows, 1385 users, 2015-01-01 to 2015-12-31; cold rows 489 (248 users), rating==5 share in cold rows 0.804
+interactions_test: 7408 rows, 1557 users, 2016-01-01 to 2018-12-18; cold rows 894 (335 users), rating==5 share in cold rows 0.796
+minutes: 834 zero -> imputed 38; 1748 clipped at 730
+nutrition.calories: 1807 clipped at 3358.5
+nutrition.total_fat_pdv: 1798 clipped at 285.0
+nutrition.sugar_pdv: 1821 clipped at 1092.0
+nutrition.sodium_pdv: 1788 clipped at 197.0
+nutrition.protein_pdv: 1776 clipped at 177.0
+nutrition.saturated_fat_pdv: 1799 clipped at 381.0
+nutrition.carbohydrates_pdv: 1810 clipped at 150.0
+nutrition_extreme: 5528 recipes; calories_zero: 16
 description: 3954 missing -> ''
 RAW_recipes_clean: 178265 recipes (PP_recipes subset)
-PP_users_clean: 19940 users
+PP_users_clean: 28671 users
