@@ -1,0 +1,19 @@
+interactions_train: drop rating==0 -> 698901 -> 681944 (-16957)
+interactions_validation: drop rating==0 -> 7023 -> 6667 (-356)
+interactions_test: drop rating==0 -> 12455 -> 11768 (-687)
+users with < 3 rated train interactions: 5021 removed
+interactions_train: drop thin users -> 681944 -> 672419 (-9525)
+interactions_validation: drop thin users -> 6667 -> 6203 (-464)
+interactions_test: drop thin users -> 11768 -> 10136 (-1632)
+minutes: 834 zero -> imputed 35; 1837 clipped at 720
+nutrition.calories: 1895 clipped at 3282.4
+nutrition.total_fat_pdv: 1895 clipped at 280.9
+nutrition.sugar_pdv: 1907 clipped at 1058.0
+nutrition.sodium_pdv: 1810 clipped at 196.0
+nutrition.protein_pdv: 1848 clipped at 175.0
+nutrition.saturated_fat_pdv: 1891 clipped at 368.0
+nutrition.carbohydrates_pdv: 1862 clipped at 148.0
+nutrition_extreme: 5715 recipes; calories_zero: 16
+description: 3954 missing -> ''
+RAW_recipes_clean: 178265 recipes (PP_recipes subset)
+PP_users_clean: 19940 users
