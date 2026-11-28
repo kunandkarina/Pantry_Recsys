@@ -160,7 +160,7 @@ python3 preprocess.py          # 產生 data_clean/（原始檔放在 dataset/�
 - `tags`、`ingredients`、`steps` 是字串形式的 list，要用 `ast.literal_eval` 轉回 list。
 - minutes、nutrition 的 log 轉換與標準化留到 feature engineering 階段。
 
-## 結果
+## Result
 
 test 的冷啟動列（4,099 筆，2014–2018），label 為 `rating == 5`。CI 為以 user 為單位的 bootstrap 95%（1,000 次）；
 ΔAUC 為對 B1 的配對 bootstrap，p 為單尾（模型不比 B1 好的比例）。Hit@10：1 個 5 分新食譜 + 99 個未評過的新食譜，共 1,000 組，隨機為 0.10。
@@ -179,7 +179,7 @@ test 的冷啟動列（4,099 筆，2014–2018），label 為 `rating == 5`。CI
 
 時間衰減版（-T）與不衰減版差距 < 0.001 AUC，表中省略。選出的超參數：`TRAIN_MODE = pseudo_cold`、`C = 0.1`、不加 class_weight（見 `results/params.json`）。
 
-Overall：
+Overall:
 - **相似度單獨使用只小幅提升**（+0.005 至 +0.007 AUC），ingredients 在 AUC 上較好，tags 在 Hit@10 上較好。
 - **Jaccard 與 Cosine 差不多，時間衰減幾乎沒有影響。**
 - **LR 結合相似度、食譜內容與作者特徵後提升才明顯**（+0.020 AUC，p = 0.002），Hit@10 約為隨機的 2 倍；GBDT 與 LR 相當，非線性沒有帶來額外好處。
