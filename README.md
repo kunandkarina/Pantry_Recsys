@@ -85,7 +85,7 @@ train 的評分分布：1 分 3,917、2 分 7,443、3 分 26,715、4 分 129,323
 - 新食譜沒有互動紀錄，食譜端只用**內容與作者**特徵，不用任何評論統計。`n_fit`、`cold` 只用來篩選評估列，不當特徵。
 - train 每一列的 user 特徵只用該 user **在那天之前**的歷史（依時間累積），不包含該列自己的 label。
 
-## 特徵（規劃）
+## 特徵
 
 ### User 端
 評分次數、平均評分、收縮後的 P(5)、評分標準差、距上次評分天數、偏好的 tags/食材、平均烹飪時間與熱量、`PP_users_clean.csv` 的 techniques（選用）。
@@ -125,7 +125,7 @@ w_uij  = Sim(i,j) · exp(−λ · (t − t_uj) / 365)
 
 另有：新食譜的時間／熱量與 user 平均的差距、user 對同一作者食譜的歷史 5 分比例、是否為 user 自己發布的食譜。train 列一律只用該列日期之前的歷史。
 
-## 模型（規劃）
+## 模型
 
 詳細規格見 `SPEC.md`。
 
@@ -137,7 +137,7 @@ w_uij  = Sim(i,j) · exp(−λ · (t − t_uj) / 365)
 | C1 / C2 | Cosine 加權平均（tags / ingredients），λ = 0 | 對照：比較特徵表示法 |
 | J1-T … C2-T | 上面四個加上時間衰減（λ > 0） | 檢查近期評分是否比較準 |
 | **LR** | Logistic Regression，全部特徵 | **主模型**，L2 正則化 |
-| GBDT（選做） | LightGBM，同樣特徵 | 檢查非線性能否再提升 |
+| GBDT（對照） | sklearn HistGradientBoosting，同樣特徵 | 檢查非線性能否再提升 |
 
 主要比較：相似度加權平均的 2 × 2 × 2 表（Jaccard／Cosine × tags／ingredients × 有無時間衰減）。
 
@@ -159,3 +159,29 @@ python3 preprocess.py          # 產生 data_clean/（原始檔放在 dataset/�
 - CSV 中的空字串會被 pandas 讀成 NaN，讀取 `RAW_recipes_clean.csv` 後要對 `description` 做 `.fillna("")`，或改用 `has_description`。
 - `tags`、`ingredients`、`steps` 是字串形式的 list，要用 `ast.literal_eval` 轉回 list。
 - minutes、nutrition 的 log 轉換與標準化留到 feature engineering 階段。
+
+## 結果
+
+test 的冷啟動列（4,099 筆，2014–2018），label 為 `rating == 5`。CI 為以 user 為單位的 bootstrap 95%（1,000 次）；
+ΔAUC 為對 B1 的配對 bootstrap，p 為單尾（模型不比 B1 好的比例）。Hit@10：1 個 5 分新食譜 + 99 個未評過的新食譜，共 1,000 組，隨機為 0.10。
+完整表格與圖在 `results/`（`summary.csv`、`test_main.csv`、`test_vs_B1.csv`、`test_ranking_hit10.csv`）。
+
+| 模型 | AUC [95% CI] | ΔAUC vs B1 (p) | log loss | Brier | Hit@10 |
+|---|---|---|---|---|---|
+| B0 | 0.500 | – | 0.510 | 0.164 | – |
+| B1（user P(5)） | 0.721 [0.683, 0.755] | – | 0.457 | 0.147 | 0.100 |
+| J1（Jaccard tags） | 0.725 [0.689, 0.758] | +0.005 (0.11) | 0.455 | 0.146 | 0.139 |
+| J2（Jaccard ingredients） | 0.727 [0.692, 0.759] | +0.006 (0.03) | 0.453 | 0.145 | 0.118 |
+| C1（Cosine tags） | 0.726 [0.688, 0.758] | +0.005 (0.08) | 0.454 | 0.145 | 0.136 |
+| C2（Cosine ingredients） | 0.728 [0.693, 0.760] | +0.007 (0.01) | 0.453 | 0.145 | 0.122 |
+| **LR（主模型）** | **0.741 [0.708, 0.771]** | **+0.020 (0.002)** | **0.444** | **0.142** | **0.205** |
+| GBDT（對照） | 0.741 [0.710, 0.770] | +0.020 (0.002) | 0.443 | 0.143 | 0.220 |
+
+時間衰減版（-T）與不衰減版差距 < 0.001 AUC，表中省略。選出的超參數：`TRAIN_MODE = pseudo_cold`、`C = 0.1`、不加 class_weight（見 `results/params.json`）。
+
+重點：
+- **相似度單獨使用只小幅提升**（+0.005 至 +0.007 AUC），ingredients 在 AUC 上較好，tags 在 Hit@10 上較好。
+- **Jaccard 與 Cosine 差不多，時間衰減幾乎沒有影響。**
+- **LR 結合相似度、食譜內容與作者特徵後提升才明顯**（+0.020 AUC，p = 0.002），Hit@10 約為隨機的 2 倍；GBDT 與 LR 相當，非線性沒有帶來額外好處。
+- **user 自己的歷史是主要訊號**：validation 的 ablation 中，拿掉 user 特徵 AUC 降約 0.02–0.03，只加相似度到 user 特徵上 +0.001。
+- 限制：冷啟動列只有幾千筆，CI 約 ±0.03，小差距（如 Jaccard vs Cosine）分不出高下；test 跨 5 年，模型只用 2014 年以前的資料訓練。
