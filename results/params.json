@@ -1,0 +1,58 @@
+{
+  "BETA": 1.0,
+  "MAX_DF": 0.35,
+  "WA": {
+    "J1": {
+      "sim": "jac_tag",
+      "k": 50,
+      "alpha": 5.0,
+      "lam": 0.0
+    },
+    "J1-T": {
+      "sim": "jac_tag",
+      "k": 50,
+      "alpha": 5.0,
+      "lam": 0.03
+    },
+    "J2": {
+      "sim": "jac_ing",
+      "k": 50,
+      "alpha": 2.0,
+      "lam": 0.0
+    },
+    "J2-T": {
+      "sim": "jac_ing",
+      "k": 50,
+      "alpha": 2.0,
+      "lam": 0.03
+    },
+    "C1": {
+      "sim": "cos_tag",
+      "k": 50,
+      "alpha": 10.0,
+      "lam": 0.0
+    },
+    "C1-T": {
+      "sim": "cos_tag",
+      "k": 50,
+      "alpha": 10.0,
+      "lam": 0.03
+    },
+    "C2": {
+      "sim": "cos_ing",
+      "k": 50,
+      "alpha": 5.0,
+      "lam": 0.0
+    },
+    "C2-T": {
+      "sim": "cos_ing",
+      "k": 50,
+      "alpha": 5.0,
+      "lam": 0.03
+    }
+  },
+  "TRAIN_MODE": "pseudo_cold",
+  "C": 0.1,
+  "CLASS_WEIGHT": null,
+  "LAM_USER": 0.03
+}

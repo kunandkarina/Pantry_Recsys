@@ -1,0 +1,7 @@
+.DS_Store
+# raw Kaggle files and generated splits (run preprocess.py to rebuild data_clean/)
+dataset/
+data_clean/
+__pycache__/
+.ipynb_checkpoints/
+.venv/
