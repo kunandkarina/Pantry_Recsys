@@ -149,11 +149,11 @@ Ablation（LR）：只用 user 特徵 → 加相似度 → 加食譜內容 → �
 python3 preprocess.py          # 產生 data_clean/（原始檔放在 dataset/）
 ```
 
-再依序執行 notebook：`01_eda` → `02_baselines` → `03_similarity` → `04_lr` → `final`。
-02–04 會把選出的超參數存到 `results/params.json`，`final.ipynb` 只讀取它，test 也只在 `final.ipynb` 評估。
+再依序執行 notebook：`1_data_overview` → `2_baselines` → `3_similarity` → `4_lr` → `5_results`。
+2–4 會把選出的超參數存到 `results/params.json`，`5_results.ipynb` 只讀取它，test 也只在 `5_results.ipynb` 評估。
 程式模組：`features.py`（資料、snapshot、相似度、特徵）、`models.py`（調參、LR、訓練列）、`evaluation.py`（指標、bootstrap、配對 bootstrap）、`ranking.py`（Hit@10／NDCG@10）、`config.py`（共用設定）。
 
-記憶體：03、04、final 最高約 3.6 GB。
+記憶體：3、4、5 最高約 3.6 GB。
 
 ## 使用注意
 - CSV 中的空字串會被 pandas 讀成 NaN，讀取 `RAW_recipes_clean.csv` 後要對 `description` 做 `.fillna("")`，或改用 `has_description`。

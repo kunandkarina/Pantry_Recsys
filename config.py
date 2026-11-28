@@ -1,7 +1,7 @@
 """Settings shared by every notebook, and the hyperparameters passed between them.
 
-01_eda -> 02_baselines (BETA, MAX_DF) -> 03_similarity (WA) -> 04_lr (TRAIN_MODE, C, CLASS_WEIGHT, LAM_USER) -> final
-Each development notebook saves what it chose to results/params.json; final.ipynb only reads it.
+1_data_overview -> 2_baselines (BETA, MAX_DF) -> 3_similarity (WA) -> 4_lr (TRAIN_MODE, C, CLASS_WEIGHT, LAM_USER) -> 5_results
+Each development notebook saves what it chose to results/params.json; 5_results.ipynb only reads it.
 """
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ PARAMS_FILE = RESULTS / "params.json"
 LABEL = "eq5"                 # main label 1[rating == 5]; "ge4" = 1[rating >= 4] is the sensitivity label
 H = 100                       # most recent history recipes per user used for similarities
 N_BOOT = int(os.environ.get("N_BOOT", 1000))   # bootstrap resamples for confidence intervals
-# How the LR / GBDT training rows are built (04_lr compares them on validation and picks one).
+# How the LR / GBDT training rows are built (4_lr compares them on validation and picks one).
 #   all           : every train row of the snapshot years
 #   pseudo_cold   : only rows whose recipe had no review before that year (like a cold row)
 #   pseudo_cold_w : pseudo_cold, each row weighted 1 / sqrt(rows of its user)
@@ -50,7 +50,7 @@ def load_params(*required) -> dict:
     missing = [k for k in required if k not in params]
     if missing:
         raise RuntimeError(f"{missing} not in {PARAMS_FILE}: run the earlier notebooks first "
-                           "(02_baselines -> 03_similarity -> 04_lr)")
+                           "(2_baselines -> 3_similarity -> 4_lr)")
     return params
 
 

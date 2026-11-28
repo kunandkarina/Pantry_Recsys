@@ -164,12 +164,12 @@ w_uij = Sim(i,j) · exp(−λ · (t − t_uj) / 365)
 | `evaluation.py` | AUC／log loss／Brier、以 user 為單位的 bootstrap CI、配對 bootstrap、平均值的 CI |
 | `ranking.py` | 排名 list 的抽樣、Hit@10／NDCG@10（同分以期望位置計算） |
 | `config.py` | 共用設定（label、H、bootstrap 次數、各參數格點），以及 notebook 之間傳遞超參數的 `results/params.json` |
-| `01_eda.ipynb` | 探索分析（不選參數） |
-| `02_baselines.ipynb` | B0、B1；選 `BETA`、`MAX_DF` |
-| `03_similarity.ipynb` | 8 個相似度版本；選每個版本的 k、α、λ（`WA`）；2 × 2 × 2 表（AUC 與 Hit@10）、與 B1 的配對比較、λ、k 曲線 |
-| `04_lr.ipynb` | 比較三種訓練列模式並選 `TRAIN_MODE`、`C`、`CLASS_WEIGHT`；ablation、係數、GBDT、cold vs warm、歷史長度、calibration、`>= 4` 敏感度 |
-| `final.ipynb` | 只讀 `params.json`、不調參；validation 結果、**test 只在這裡跑一次**、報告用的圖表 |
+| `1_data_overview.ipynb` | 探索分析（不選參數） |
+| `2_baselines.ipynb` | B0、B1；選 `BETA`、`MAX_DF` |
+| `3_similarity.ipynb` | 8 個相似度版本；選每個版本的 k、α、λ（`WA`）；2 × 2 × 2 表（AUC 與 Hit@10）、與 B1 的配對比較、λ、k 曲線 |
+| `4_lr.ipynb` | 比較三種訓練列模式並選 `TRAIN_MODE`、`C`、`CLASS_WEIGHT`；ablation、係數、GBDT、cold vs warm、歷史長度、calibration、`>= 4` 敏感度 |
+| `5_results.ipynb` | 只讀 `params.json`、不調參；validation 結果、**test 只在這裡跑一次**、報告用的圖表 |
 
-執行順序：`01` → `02` → `03` → `04` → `final`。開發用的 notebook（01–04）不碰 test。結果表與圖存到 `results/`。
+執行順序：`1` → `2` → `3` → `4` → `5`。開發用的 notebook（1–4）不碰 test。結果表與圖存到 `results/`。
 
 固定設定：每個 user 只取最近 H = 100 道歷史食譜計算相似度；tag 過濾門檻 `max_df` 從 {0.2, 0.35, 0.5, 0.75, 1.0} 中在 validation 上選。
